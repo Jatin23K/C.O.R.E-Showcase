@@ -69,6 +69,7 @@ Tier 3 End Nodes
 | [MEMORY_PIPELINE.md](./docs/MEMORY_PIPELINE.md) | Short-term → CRON filter → long-term, Phase 2 additions |
 | [ZERO_TRUST_DRM.md](./docs/ZERO_TRUST_DRM.md) | Tailscale heartbeat validation, RAM-only decryption keys |
 | [PERSONA_ENGINE.md](./docs/PERSONA_ENGINE.md) | Backend persona system — JAMES/JANIE and DAVID/DARA |
+| [INFORMATION_SOVEREIGNTY.md](./docs/INFORMATION_SOVEREIGNTY.md) | Phase 14 — C.O.R.E. monitors platforms autonomously, filters noise, delivers daily digest. You never open social media again. |
 
 ---
 
