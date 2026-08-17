@@ -157,7 +157,48 @@ To prevent historical vectors in Qdrant from breaking when embedding models are 
 
 ---
 
-## 7. Relational Database Schema Contracts
+## 7. Insulating Memory from LLM Flaws (The 5 Deterministic Firewalls)
+
+Because LLMs are probabilistic, non-deterministic, and prone to hallucinations, C.O.R.E. enforces a fundamental architectural axiom:
+> **"Use the LLM for linguistic translation and entity extraction; use deterministic software and classical ML for storage, lifecycle, and retrieval."**
+
+```
+[USER INPUT] ──> [LLM Extractor] ──> [FIREWALL 1: SchemaNormalizer] ──> [FIREWALL 2: Confidence Floor]
+                                                                                   │
+                                                                                   ▼
+                                                                      [LOCAL ENCRYPTED SQLITE]
+                                                                                   │
+                                                                                   ▼
+[LIFECYCLE DECISIONS] ◄── [FIREWALL 4: Classical ML (Random Forest)] ◄── [FIREWALL 3: Math Decay S(t)]
+(Zero LLM Deletion Authority)
+```
+
+### The 5 Architectural Firewalls:
+
+1. **Deterministic Machine Learning for Lifecycle (Zero LLM Deletion Authority):**
+   * The LLM is **never** asked whether a memory should be kept, decayed, or deleted. Asking an LLM creates temperature-dependent inconsistency.
+   * All lifecycle actions (`KEEP`, `DECAY`, `BIN`) are computed exclusively by the deterministic **Scikit-Learn Random Forest Classifier** and the exponential decay formula ($S(t) = S_0 \cdot e^{-\lambda t}$).
+
+2. **Pre-Ingestion Schema Normalizer & Pydantic Firewall:**
+   * Before any memory reaches SQLite, `SchemaNormalizer` strips reasoning tags (`<thought>...</thought>`), strips markdown fences (` ```json `), and enforces closed-set `MemoryTopicTag` Enums.
+   * Any invalid tag invented by the LLM is automatically rejected and mapped to a safe default.
+
+3. **Provisional Staging & Confidence Floors (Stops Hallucinated Ingestion):**
+   * Extracted facts require an **Extraction Confidence Score ($\ge 0.85$)**:
+     * **Score $\ge 0.85$ (Direct/Definitive statement):** Persisted to long-term memory.
+     * **Score $< 0.85$ (Speculative/Casual statement):** Staged as `provisional_memory` with high decay ($\lambda = 0.15$), naturally auto-expiring in 14 days unless explicitly re-verified.
+
+4. **Strict Context Budgeting (Stops "Lost-in-the-Middle" Distraction):**
+   * C.O.R.E. enforces a **Hard Token Cap (Max 1,200 tokens / Top 3–5 memories)** on context injection.
+   * Memories are pre-ranked by the Temporal Recency Multiplier ($e^{-\gamma \Delta t}$), preventing prompt clutter and attention degradation.
+
+5. **The `REFINE` Self-Correction Feedback Loop:**
+   * If the LLM ever misinterprets a fact, user corrections (*"No, I work in FinTech, not EdTech"*) trigger an immediate `REFINE` event.
+   * The erroneous record is marked `is_superseded = TRUE` (silenced from active RAG) and the corrected fact is written with maximum confidence ($S_0 = 1.0$).
+
+---
+
+## 8. Relational Database Schema Contracts
 
 ### Master PostgreSQL / SQLite DDL
 
@@ -205,7 +246,7 @@ CREATE INDEX idx_logs_memory_id ON retrieval_logs (memory_id);
 
 ---
 
-## 8. Summary Comparison Matrix
+## 9. Summary Comparison Matrix
 
 | Feature | Naive Chatbot Memory | C.O.R.E. Memory at Scale |
 | :--- | :--- | :--- |
@@ -216,6 +257,7 @@ CREATE INDEX idx_logs_memory_id ON retrieval_logs (memory_id);
 | **Offline Multi-Device**| Fails / Overwrites data | **Store-and-Forward Queues + Domain Authority Routing** |
 | **Fact Contradiction** | Hallucinates conflicting dates/budgets | **Temporal Recency Multiplier ($e^{-\gamma \Delta t}$) + Entity Supercedence** |
 | **Vector Upgrades** | Broken database / manual rewrite | **Decoupled Relational Source + Blue/Green Background Re-indexing** |
+| **LLM Insulation** | Raw unshielded LLM deletes & corrupts | **5 Deterministic Firewalls (Zero LLM deletion authority)** |
 
 ---
 
