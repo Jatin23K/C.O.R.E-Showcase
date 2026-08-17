@@ -1,114 +1,109 @@
-# Architecture — C.O.R.E.
+# Technical Architecture — C.O.R.E.
 
-## Overview
+## 1. System Overview
 
-C.O.R.E. is designed as a **personal sovereign AI ecosystem** — a system that belongs entirely to one person, runs on their hardware, communicates over their private network, and stores data in their own vault.
+C.O.R.E. is designed as a **sovereign, multi-device personal operating ecosystem** — a system that belongs entirely to one person, runs on their hardware, communicates over an encrypted mesh, and isolates private memory from public knowledge.
 
-The architecture reflects three core constraints that were non-negotiable from day one:
+The architecture is governed by three non-negotiable engineering principles:
 
-1. **Privacy** — No data routed through third-party communication layers
-2. **Ownership** — No subscriptions, no platform lock-in, no external dependency on the core mesh
-3. **Scalability** — The Phase 1 two-client foundation must be extendable to an N-device ecosystem without architectural rewrites
-
----
-
-## Phase 1 Topology — Live Today
-
-```
-┌─────────────────────────────────────────┐
-│             DAVID (Desktop)              │
-│     React + Python · Windows PC          │
-│   Acting as Tier 1 Core (Phase 1)        │
-│                                          │
-│  Cortex · Files · Tasks · Projects      │
-│  Settings · Security · Bridge           │
-│  Personas: DAVID · DARA                 │
-└──────────────┬──────────────────────────┘
-               │
-     Tailscale Encrypted Mesh
-     (Private VPN · Zero third-party routing)
-               │
-┌──────────────┴──────────────────────────┐
-│              JAMES (Mobile)              │
-│        Flutter · Android                 │
-│                                          │
-│  Chat · Vault · Core Brain · Safe Tab   │
-│  Dashboard · Diagnostics                │
-│  Personas: JAMES · JANIE                │
-└─────────────────────────────────────────┘
-               │
-       Shared Memory System
-  Short-term → CRON Filter → Long-term
-```
-
-Both clients share one memory system. JAMES can delegate heavy computation to DAVID over the bridge. The bridge is bidirectional — DAVID can push context to JAMES.
+1. **Data Sovereignty** — No personal conversations, daily memory, or encryption keys are routed through third-party platforms.
+2. **Capability Self-Awareness & Graceful Degradation** — Every satellite node operates autonomously offline and delegates heavy compute to the central brain based on hardware capability thresholds.
+3. **Model Independence** — Application logic is fully decoupled from LLM providers via a provider-agnostic adapter layer.
 
 ---
 
-## Phase 2 Topology — Designed
+## 2. Network Topology: Hub-and-Spoke Mesh
 
 ```
-┌─────────────────────────────────────────┐
-│         Tier 1 Core — DGX Spark          │
-│    Dedicated AI Hardware · Sovereign     │
-│    Full Local Inference · No Cloud       │
-│    All Sub-Hub Orchestration             │
-└──────────┬──────────────────────────────┘
-           │
-    Tailscale Encrypted Mesh
-           │
-    ┌──────┴──────────────────────────┐
-    │         Tier 2 Sub-Hubs          │
-    ├──────────────────────────────────┤
-    │  JAMES (Mobile · Flutter)        │
-    │  Home Tablet (Home Control Hub)  │
-    │  ∞ PC Nodes (Desktop Clients)    │
-    └──────┬──────────────────────────┘
-           │
-    ┌──────┴──────────────────────────┐
-    │         Tier 3 End Nodes         │
-    ├──────────────────────────────────┤
-    │  Smart Watch · Biometric Input   │
-    │  Meta Glasses · AR Context       │
-    │  Smart Bulbs · IoT Environment   │
-    │  ∞ Edge Devices                  │
-    └─────────────────────────────────┘
+═════════════════════════════════════════════════════════════════════════════════════════
+                         HARDWARE NODES (Tailscale Encrypted Mesh)
+═════════════════════════════════════════════════════════════════════════════════════════
+  [MOBILE NODE: JAMES]              [CENTRAL NODE: DGX]              [DESKTOP NODE: DAVID]
+  (Android Phone) ◄════════════════► (Always-On Server) ◄════════════════► (Windows PC)
+                      Tailscale Mesh                     Tailscale Mesh
+                                           │
+═══════════════════════════════════════════╪═════════════════════════════════════════════
+                   C.O.R.E. BRAIN & SOFTWARE EXTENSION MATRIX
+═══════════════════════════════════════════╪═════════════════════════════════════════════
+                                           │
+                ┌──────────────────────────┴──────────────────────────┐
+                │             C.O.R.E. CENTRAL ORCHESTRATOR           │
+                │             • Cognitive Router & Swarm Engine       │
+                ├──────────────────────────┬──────────────────────────┤
+                │                          │                          │
+                ▼                          ▼                          ▼
+   ┌────────────────────────┐ ┌────────────────────────┐ ┌────────────────────────┐
+   │  MEMORY ENGINE (Core)  │ │   A.X.I.O.M. (Core)    │ │ SOFTWARE EXTENSIONS    │
+   │  • Behavioral Decay    │ │  • Omnimodal RAG       │ │ (Direct API / Webhook) │
+   │  • S(t) = S₀ · e^(-λt) │ │  • Personal Library    │ │                        │
+   │  • Zero-Knowledge Sync │ │  • Qdrant Vector Index │ │ ├── TLDR Shield        │
+   └────────────────────────┘ └────────────────────────┘ │ ├── LaunchMintAI       │
+                                                         │ └── Future Plugins     │
+                                                         └────────────────────────┘
 ```
 
-In the final architecture, DAVID/PC steps down from acting Tier 1 Core to a Tier 2 Sub-Hub. The DGX Spark (or equivalent dedicated AI hardware) takes Tier 1. The architecture was designed so this transition requires no client rewrites — only a config change at the bridge layer.
+### Store-and-Forward Offline Task Delegation
+1. When a user issues a heavy request on a resource-constrained satellite node (e.g. Android mobile running a 3B model):
+2. The local node inspects task complexity vs. local RAM limits.
+3. If the task exceeds local capabilities and Central Node is online, it delegates the task over Tailscale.
+4. If Central Node is offline, the satellite node notifies the user, executes a lightweight local summary, and queues the full command in a local `DeferredTaskQueue`.
+5. Upon Tailscale heartbeat reconnection, queued tasks auto-flush to Central Node for background processing.
 
 ---
 
-## Design Decisions
+## 3. Cognitive Engine: Dual-Gear Execution Depth
 
-### Why Tailscale for the bridge?
+C.O.R.E. features a dynamic **Execution Depth Engine** that scales test-time compute based on the complexity and sensitivity of the prompt:
 
-The requirement was zero third-party involvement in the communication layer between clients. Tailscale runs as a private mesh — traffic flows peer-to-peer, encrypted end-to-end, and never passes through a Tailscale-controlled relay if both nodes are reachable. For nodes that are not directly reachable, the relay is used only for routing, not decryption.
+```
+                      [USER PROMPT / TASK INPUT]
+                                  │
+                                  ▼
+                     [EXECUTION DEPTH RESOLVER]
+              Inspects query intent, sensitivity, & flags
+                                  │
+                 ┌────────────────┴────────────────┐
+                 │                                 │
+                 ▼                                 ▼
+      [GEAR 1: STANDARD MODE]           [GEAR 2: MAX_DEPTH OVERDRIVE]
+      • Latency: 1 – 3 seconds          • Latency: 15 – 45 seconds
+      • Single-pass direct inference    • Multi-Agent Swarm Decomposition
+      • Fast tool execution             • Monte Carlo Risk Modeling
+      • Conversational banter           • Adversarial Skeptic Reflection
+```
 
-The alternative (a self-hosted VPN server) introduces a single point of failure and maintenance overhead. Tailscale's key exchange is built on WireGuard — the cryptographic model is audited and well-understood.
-
-### Why SQLite for memory, not a database server?
-
-Phase 1 runs on a personal PC. A database server introduces a daemon that must be running, a port that must be open, and a service that can crash. SQLite is a file. It starts instantly, requires no server process, and survives machine reboots without intervention.
-
-The trade-off is write concurrency — SQLite handles one write at a time. For a two-client personal system with a nightly CRON write batch, this is not a constraint. When Phase 2 introduces multiple Sub-Hubs writing simultaneously, Redis handles the queue and Qdrant handles vector storage. SQLite remains the long-term persistence layer.
-
-### Why two personas per client instead of one?
-
-A digital companion with only one personality is a product. Two personalities that behave fundamentally differently — same infrastructure, different brain — is a system. The persona engine was built to prove that the cognitive profile is a parameter, not a hardcoded identity. This matters for the Phase 2 multi-user RBAC design: each Tenant ID can have its own persona configuration.
-
-### Why closed-source?
-
-The system holds personal memory, private conversations, and contextual data about one person's life. Open-sourcing the implementation does not increase trust — it increases attack surface. The engineering decisions are documented publicly (this repo). The implementation stays private for the same reason the vault contents stay private.
+* **`STANDARD` Gear:** Used for daily conversation, quick queries, device toggles, and voice interactions.
+* **`MAX_DEPTH` Gear (Swarm Overdrive):** Deploys a specialized sub-agent swarm:
+  * **IB Banker:** Rigorous unit economics and cash flow modeling.
+  * **Detective:** Adversarial edge case auditing and risk analysis.
+  * **Threat Hunter:** Security vulnerability and failure mode analysis.
+  * **Business Intelligence:** Market sizing and macro trend analysis.
+  * **Skeptic:** Synthesizes competing agent outputs and eliminates hallucinations.
 
 ---
 
-## Trade-offs Acknowledged
+## 4. Model-Agnostic Abstraction Layer
 
-| Decision | Trade-off |
-|---|---|
-| Tailscale mesh over self-hosted VPN | Dependency on Tailscale key exchange infrastructure |
-| SQLite over PostgreSQL | No concurrent writes — acceptable for Phase 1 scale |
-| Cloud API primary (Gemini) | External API dependency — acknowledged, hardware-blocked |
-| Closed-source | No community contribution — intentional |
-| Two clients before ecosystem | Phase 2 requires additional hardware investment |
+To ensure complete freedom from vendor lock-in and support rapid model swapping (e.g. Gemini 2.5 → DeepSeek-R1 → Qwen 2.5):
+
+```
+[Raw Model Response] ──> [SchemaNormalizer] ──> [ModelAdapter] ──> [Application Core]
+```
+
+* **`SchemaNormalizer`:**
+  * Strips internal `<thought>...</thought>` scratchpad blocks (preventing TTS engines from reading reasoning tags over voice channels).
+  * Cleans markdown JSON code fences (` ```json `).
+  * Extracts inline `[ACTION: ...]` execution tokens.
+* **Automated Regression Suite (`benchmark_model_swap.py`):**
+  * Evaluates any newly swapped model against 30 multi-modal test prompts (JSON formatting, tool calling, persona adherence, edge cases).
+  * Enforces a minimum **90% benchmark pass rate** before a new model is deployed to live production.
+
+---
+
+## 5. Security & Ephemeral Keys
+
+* **Ephemeral RAM Decryption Keys:** Local SQLite databases are decrypted using keys that exist exclusively in volatile memory (RAM).
+* **Heartbeat-Triggered Zeroization:** If a satellite node loses its encrypted Tailscale heartbeat (network severance, physical theft, or power-off), RAM keys are immediately wiped, rendering local storage cryptographically inaccessible.
+* **Risk-Gated Action Dispatcher:**
+  * *Low-Risk Actions (Lights, AC, Music):* Auto-executed across nodes.
+  * *High-Risk Actions (Door locks, Security cameras, Storage wiping):* Remote execution is blocked; requires cryptographic approval on the primary device.
