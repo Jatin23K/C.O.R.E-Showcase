@@ -12,19 +12,33 @@ The architecture is governed by three non-negotiable engineering principles:
 
 ---
 
-## 2. Network Topology: Hub-and-Spoke Mesh
+## 2. Network Topology: Phase 1 Bridge & Phase 2 Star-Hub
 
 ```
-═════════════════════════════════════════════════════════════════════════════════════════
-                         HARDWARE NODES (Tailscale Encrypted Mesh)
-═════════════════════════════════════════════════════════════════════════════════════════
-  [MOBILE NODE: JAMES]              [CENTRAL NODE: DGX]              [DESKTOP NODE: DAVID]
-  (Android Phone) ◄════════════════► (Always-On Server) ◄════════════════► (Windows PC)
-                      Tailscale Mesh                     Tailscale Mesh
-                                           │
-═══════════════════════════════════════════╪═════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+PHASE 1: DIRECT PEER-TO-PEER BRIDGE (ACTIVE TESTBENCH & HARDWARE PROFILING)
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+  [MOBILE NODE: JAMES]                                                [DESKTOP NODE: DAVID]
+  (Android Flutter Client) ◄═════════ Tailscale WireGuard P2P ════════► (Windows FastAPI Host)
+
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+PHASE 2: SOVEREIGN STAR-HUB TOPOLOGY (ROADMAP SPECIFICATION)
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+                                ┌───────────────────────────────────┐
+                                │ CENTRAL NODE (STANDALONE HARDWARE)│
+                                │ • Always-On 24/7 Headless Host    │
+                                │ • Master Qdrant & SQLite Store    │
+                                └─────────────────┬─────────────────┘
+                                                  │
+                 ═══════════════════ Tailscale Encrypted Mesh ═══════════════════
+                   │                      │                 │                  │
+                   ▼                      ▼                 ▼                  ▼
+          [MOBILE: JAMES]         [WORKSTATION: DAVID] [SMART HOME HUB]   [REMOTE NODE]
+          (Android Client)        (Windows PC Host)    (Home Assistant)   (Auxiliary Compute)
+                                                  │
+══════════════════════════════════════════════════╪════════════════════════════════════════════════
                    C.O.R.E. BRAIN & SOFTWARE EXTENSION MATRIX
-═══════════════════════════════════════════╪═════════════════════════════════════════════
+══════════════════════════════════════════════════╪════════════════════════════════════════════════
                                            │
                 ┌──────────────────────────┴──────────────────────────┐
                 │             C.O.R.E. CENTRAL ORCHESTRATOR           │

@@ -71,7 +71,7 @@ Both clients built and running. Tailscale bridge operational. Execution Depth En
 | Ephemeral Vault Security | ✅ Operational | RAM-only decryption keys · Mesh heartbeat destruction |
 
 **Phase 2 — Sovereign Ecosystem · Specification Designed**
-Scaling toward a dedicated Always-On Central Node (DGX / Sovereign Server) managing the master Qdrant index, Risk-Gated cross-device command dispatcher, and Home Assistant / MQTT IoT protocol bus.
+Scaling toward a dedicated Always-On Central Node (Standalone Hardware Host) managing the master Qdrant index, Risk-Gated cross-device command dispatcher, Home Assistant / MQTT IoT protocol bus, and auxiliary remote compute nodes.
 
 ---
 
