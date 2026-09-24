@@ -2,12 +2,12 @@
 
 ## 1. System Overview
 
-C.O.R.E. is designed as a **sovereign, multi-device personal operating ecosystem** — a system that belongs entirely to one person, runs on their hardware, communicates over an encrypted mesh, and isolates private memory from public knowledge.
+C.O.R.E. is designed as a **sovereign, multi-device personal operating ecosystem** — a system intended to belong entirely to one person, run on their hardware, communicate over an encrypted mesh, and isolate private memory from public knowledge. This document describes the public architecture representation; it is not a claim that the full ecosystem is prototype-ready.
 
 The architecture is governed by three non-negotiable engineering principles:
 
-1. **Data Sovereignty** — No personal conversations, daily memory, or encryption keys are routed through third-party platforms.
-2. **Capability Self-Awareness & Graceful Degradation** — Every satellite node operates autonomously offline and delegates heavy compute to the central brain based on hardware capability thresholds.
+1. **Data Sovereignty** — Personal conversations, daily memory, and encryption keys should remain under user-controlled boundaries. External model APIs are an explicit dependency where used; the device bridge is designed without a third-party relay.
+2. **Capability Self-Awareness & Graceful Degradation** — The target design lets each satellite detect hardware limits, provide a degraded local path, and delegate heavy compute when a trusted central node is available. This behavior remains subject to field testing.
 3. **Model Independence** — Application logic is fully decoupled from LLM providers via a provider-agnostic adapter layer.
 
 ---
@@ -56,18 +56,19 @@ PHASE 2: SOVEREIGN STAR-HUB TOPOLOGY (ROADMAP SPECIFICATION)
                                                          └────────────────────────┘
 ```
 
-### Store-and-Forward Offline Task Delegation
-1. When a user issues a heavy request on a resource-constrained satellite node (e.g. Android mobile running a 3B model):
+### Store-and-Forward Offline Task Delegation — Phase 2 Target Flow
+The following is a proposed behavior for the future central-node architecture, not a claim that the complete flow is currently deployed:
+1. When a user issues a heavy request on a resource-constrained satellite node (e.g. Android mobile running a small local model):
 2. The local node inspects task complexity vs. local RAM limits.
 3. If the task exceeds local capabilities and Central Node is online, it delegates the task over Tailscale.
 4. If Central Node is offline, the satellite node notifies the user, executes a lightweight local summary, and queues the full command in a local `DeferredTaskQueue`.
-5. Upon Tailscale heartbeat reconnection, queued tasks auto-flush to Central Node for background processing.
+5. Upon Tailscale heartbeat reconnection, queued tasks can be reconciled and submitted to the Central Node, subject to idempotency, authorization, and conflict-resolution checks.
 
 ---
 
 ## 3. Cognitive Engine: Dual-Gear Execution Depth
 
-C.O.R.E. features a dynamic **Execution Depth Engine** that scales test-time compute based on the complexity and sensitivity of the prompt:
+C.O.R.E. specifies a dynamic **Execution Depth Engine** that would scale test-time compute based on the complexity and sensitivity of the prompt. The latency values below are design budgets, not public production measurements:
 
 ```
                       [USER PROMPT / TASK INPUT]
@@ -98,7 +99,7 @@ C.O.R.E. features a dynamic **Execution Depth Engine** that scales test-time com
 
 ## 4. Model-Agnostic Abstraction Layer
 
-To ensure complete freedom from vendor lock-in and support rapid model swapping (e.g. Gemini 2.5 → DeepSeek-R1 → Qwen 2.5):
+To reduce vendor coupling and support controlled model swapping (e.g. Gemini 2.5 → DeepSeek-R1 → Qwen 2.5):
 
 ```
 [Raw Model Response] ──> [SchemaNormalizer] ──> [ModelAdapter] ──> [Application Core]
@@ -108,16 +109,16 @@ To ensure complete freedom from vendor lock-in and support rapid model swapping 
   * Strips internal `<thought>...</thought>` scratchpad blocks (preventing TTS engines from reading reasoning tags over voice channels).
   * Cleans markdown JSON code fences (` ```json `).
   * Extracts inline `[ACTION: ...]` execution tokens.
-* **Automated Regression Suite (`benchmark_model_swap.py`):**
+* **Proposed automated regression gate (`benchmark_model_swap.py`):**
   * Evaluates any newly swapped model against 30 multi-modal test prompts (JSON formatting, tool calling, persona adherence, edge cases).
-  * Enforces a minimum **90% benchmark pass rate** before a new model is deployed to live production.
+  * Defines a minimum **90% benchmark pass rate** as a future promotion gate; it is not a claim of a currently deployed production model.
 
 ---
 
 ## 5. Security & Ephemeral Keys
 
-* **Ephemeral RAM Decryption Keys:** Local SQLite databases are decrypted using keys that exist exclusively in volatile memory (RAM).
-* **Heartbeat-Triggered Zeroization:** If a satellite node loses its encrypted Tailscale heartbeat (network severance, physical theft, or power-off), RAM keys are immediately wiped, rendering local storage cryptographically inaccessible.
+* **Ephemeral RAM Decryption Keys:** The design proposes that local SQLite databases be decrypted using keys that exist exclusively in volatile memory (RAM).
+* **Heartbeat-Triggered Zeroization:** The design proposes that a verified Tailscale heartbeat failure trigger key zeroization. The timing, completeness, and resistance to compromise require implementation and adversarial validation.
 * **Risk-Gated Action Dispatcher:**
   * *Low-Risk Actions (Lights, AC, Music):* Auto-executed across nodes.
   * *High-Risk Actions (Door locks, Security cameras, Storage wiping):* Remote execution is blocked; requires cryptographic approval on the primary device.

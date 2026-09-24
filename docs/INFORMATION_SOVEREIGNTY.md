@@ -1,4 +1,6 @@
-# Information Sovereignty Layer — C.O.R.E.
+# Information Sovereignty Layer — C.O.R.E. Phase 2 Design
+
+> This document describes a proposed Phase 2 capability in the public C.O.R.E. architecture representation. It is a product and system design, not evidence that platform monitoring, classification, or automated digest delivery is currently deployed.
 
 ## The Problem With Social Media
 
@@ -12,9 +14,9 @@ The platforms win. Your time, attention, and mental well-being lose.
 
 ## The C.O.R.E. Answer
 
-**You do not scroll. C.O.R.E. does.**
+**The proposed C.O.R.E. layer would reduce the need to scroll.**
 
-C.O.R.E. monitors every platform you care about, autonomously, in the background. When something is uploaded or posted, C.O.R.E. reads it, classifies it, and decides whether it reaches you. You never open the platform. You never see the algorithm. You receive a clean daily digest — what actually mattered in the last 24 hours, summarized, without the noise that surrounded it.
+With the required platform permissions and integrations, the proposed layer would monitor selected sources in the background. When approved content is available, it would classify it and prepare a focused digest instead of forwarding an unrestricted feed. This remains a Phase 2 design hypothesis; it is not a claim that every platform is currently connected or monitored.
 
 This is not a filter applied on top of social media use. This is the elimination of social media use as an activity.
 
@@ -25,11 +27,11 @@ This is not a filter applied on top of social media use. This is the elimination
 ```
 You ──── NEVER OPEN THE PLATFORM
 
-C.O.R.E. Agent (DAVID / DGX Spark — Tier 1 Core)
-runs continuously in the background
+C.O.R.E. Agent (future DAVID / Central Node — Tier 1 Core)
+would run continuously when the required host is available
               │
               ▼
-Platform Monitors — watch your subscriptions
+Proposed Platform Monitors — watch approved subscriptions
 ├── YouTube: new video uploaded by [Channel]
 ├── LinkedIn: new post from [Connection]
 ├── Instagram: new post from [Account]
@@ -37,7 +39,7 @@ Platform Monitors — watch your subscriptions
 └── Newsletters: new email from [Sender]
               │
               ▼
-Content Classifier — filter passes
+Proposed Content Classifier — filter passes
 ├── Genuine knowledge → KEEP
 ├── FOMO content → DISCARD
 ├── Comparison-inducing → DISCARD
@@ -52,7 +54,7 @@ Digest Builder — summarize what survived
  Key point: [4 lines]."
               │
               ▼
-JAMES delivers your morning digest
+JAMES would deliver a morning digest
 5 minutes of reading
 = 2 hours of scrolling replaced
 = zero exposure to what was designed to manipulate you
@@ -96,22 +98,22 @@ That is not a failure. That is the correct answer. Most days, most platforms pro
 ## Platform by Platform
 
 ### YouTube
-C.O.R.E. uses the YouTube Data API to detect new uploads from every channel you subscribe to. The video transcript is extracted. An LLM processes the transcript and classifies: is this genuine knowledge, or is it a clickbait version of something you already know wrapped in a 15-minute format?
+C.O.R.E. could use the YouTube Data API to detect new uploads from approved channels. A future ingestion pipeline could extract a transcript and classify whether content is useful or low-signal. API permissions, rate limits, privacy boundaries, and implementation status would need to be validated first.
 
 If genuine: you receive a 4-line summary and the option to watch.
 If not: discarded. You never see the thumbnail. You never feel the pull.
 
 ### LinkedIn
-C.O.R.E. monitors posts from your network via API. The classifier specifically looks for the LinkedIn patterns that waste the most time: performative vulnerability, vague motivational statements, and achievement posts disguised as advice. These are discarded. Genuine job postings, skill articles, and actual industry developments pass through.
+An eventual integration could monitor approved LinkedIn sources via the permitted API surface. The classifier would need to distinguish low-signal engagement patterns from genuinely useful job postings, technical articles, and industry developments. This classification policy is a design proposal, not a measured model result.
 
 ### Instagram
-C.O.R.E. monitors posts from accounts you follow. The classifier targets comparison content — luxury, body image, lifestyle highlight reels. These are the categories with the highest correlation to FOMO and diminished well-being. Genuine personal updates from people you actually know pass through.
+An eventual integration could process approved Instagram sources. The proposed classifier would target comparison-heavy content while preserving genuine personal updates. Any claim about effects on well-being would require a defined study rather than assumption.
 
 ### Twitter/X
-C.O.R.E. monitors accounts you track. The classifier targets outrage content and hot takes designed for engagement rather than insight. Genuine developments in your fields of interest pass through.
+An eventual integration could process approved Twitter/X sources. The proposed classifier would target outrage-oriented engagement bait while preserving relevant developments. Platform access and classifier quality remain open implementation questions.
 
 ### Newsletters
-C.O.R.E. monitors your email for newsletters you're subscribed to. Each is auto-summarized. You receive the key point of each newsletter without opening your email and getting pulled into everything else.
+An eventual integration could process explicitly approved newsletters. Each item could be summarized after authorization, with retention, deletion, and external-model boundaries defined before implementation.
 
 ---
 
@@ -133,7 +135,7 @@ An operating system manages resources so the user doesn't have to think about th
 
 C.O.R.E. manages **information resources** — the same way it manages memory, tasks, and computation. The Information Sovereignty Layer is not a separate application. It is C.O.R.E. doing what it was always designed to do: handle the noise so you only receive the signal.
 
-The agent that monitors platforms runs on DAVID (Tier 1 Core). The digest is delivered by JAMES (Tier 2 Sub-Hub). The architecture already exists. This is a module on top of infrastructure that is already built.
+The target architecture places monitoring and synthesis on DAVID or a future central node, with digest delivery through JAMES. The module is designed as a Phase 2 extension of the C.O.R.E. concept; its end-to-end implementation, platform permissions, and operational validation are not complete.
 
 ---
 

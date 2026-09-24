@@ -1,10 +1,10 @@
-# Persona Engine — C.O.R.E.
+# Persona Engine — C.O.R.E. Public Design Representation
 
 ## What a Persona Is Not
 
 A persona is not a name. It is not a color scheme. It is not a voice filter applied to the same model output.
 
-A persona in C.O.R.E. is a **complete cognitive profile reload**. When the persona switches, the following change at the backend:
+A persona in the C.O.R.E. design is a **complete cognitive profile reload**. When the persona switches, the target backend behavior is to change:
 
 - System prompt
 - Reasoning approach
@@ -13,7 +13,7 @@ A persona in C.O.R.E. is a **complete cognitive profile reload**. When the perso
 - Emotional register
 - Context injection strategy
 
-The UI color shift is the **confirmation** that a persona switch happened — not the cause, and not the substance. The real change is invisible and occurs at the Python backend level before a single token is generated.
+The UI color shift is intended as the **confirmation** that a persona switch happened — not the cause, and not the substance. The intended change occurs at the backend level before the next response is generated.
 
 ---
 
@@ -66,17 +66,17 @@ User triggers persona switch (UI toggle)
 Frontend sends persona switch event to backend
           │
           ▼
-Backend: current session context flushed
+Target backend behavior: current session context flushed
           │
           ▼
-Backend: new persona configuration loaded
+Target backend behavior: new persona configuration loaded
 ├── System prompt replaced
 ├── Reasoning mode updated
 ├── Response style parameters updated
 └── Memory injection strategy updated
           │
           ▼
-Backend: acknowledgement sent to frontend
+Target backend behavior: acknowledgement sent to frontend
           │
           ▼
 Frontend: UI color scheme updates (confirmation)
@@ -97,11 +97,11 @@ Different tasks require different cognitive approaches. Analytical debugging ben
 
 **The architectural reason:**
 
-The persona engine proves that cognitive identity is a parameter, not a hardcoded value. This matters for Phase 2 Multi-User RBAC design: each Tenant ID (device/user combination) gets its own persona configuration. A family member using the system gets a completely different cognitive profile — same hardware, different brain. The persona engine is the foundation for that.
+The persona engine expresses the design principle that cognitive identity is a parameter, not a hardcoded value. This informs the Phase 2 Multi-User RBAC design: each Tenant ID (device/user combination) could receive its own persona configuration. The public Showcase documents this intended behavior; it is not a claim that the full multi-user platform is complete.
 
 **The design philosophy reason:**
 
-A system with one personality is a product. A system where the personality is a parameter is a platform. C.O.R.E. was built to be a platform — the two-persona implementation in Phase 1 is a demonstration of that, not an endpoint.
+A system with one personality is a product. A system where the personality is a parameter is a platform. C.O.R.E. is designed to be a platform — the two-persona concept and field-testing flows represent that direction, not a completed endpoint.
 
 ---
 

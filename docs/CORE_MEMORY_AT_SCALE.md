@@ -1,7 +1,7 @@
 # C.O.R.E. Memory Management at Scale
 ### Enterprise Distributed Memory Architecture & Lifecycle Specification
 
-> **System Scope**: Complete architectural blueprint for the ingestion, mathematical decay, machine learning classification, zero-knowledge synchronization, and multi-device conflict resolution of persistent conversational memory and factual knowledge in the C.O.R.E. ecosystem.
+> **System Scope**: Public architectural representation of a proposed memory subsystem for the C.O.R.E. ecosystem. It describes ingestion, mathematical decay, lifecycle classification, privacy-preserving synchronization, and multi-device conflict resolution. The separate C.O.R.E. Memory Intelligence repository contains the Applied Data Science implementation and empirical validation; this document does not claim that the full C.O.R.E. memory system is prototype-ready.
 
 ---
 
@@ -9,7 +9,7 @@
 
 Traditional conversational AI systems suffer from two fatal extremes: **Memory Overload** (hoarding all interactions indefinitely until vector search slows and cloud storage explodes) or **Blind Deletion** (wiping old memories via naive FIFO/TTL rules, destroying critical context).
 
-C.O.R.E. introduces a biological, mathematically governed **Two-Tier Sovereign Memory Engine**:
+C.O.R.E. proposes a biological, mathematically governed **Two-Tier Sovereign Memory Engine**:
 1. **Behavioral / Episodic Memory (Local & Self-Decaying):** Manages tone, preferences, working habits, and daily context. Strictly device-bound with logarithmic decay ($S(t) = S_0 \cdot e^{-\lambda t}$) and ML-driven lifecycle classification (`KEEP`, `DECAY`, `BIN`).
 2. **Factual Knowledge Base (`A.X.I.O.M.`):** Manages objective documents, research papers, and technical libraries across all devices using Matryoshka vector embeddings and ColPali visual patch retrieval.
 
@@ -73,15 +73,14 @@ Raw Interaction ──> Feature Matrix ──> RandomForest ──> cron_decisio
 5. `avg_sentiment`: Normalized user feedback resonance $[-1.0, +1.0]$ (imputed $0.0$ if unretrieved).
 6. `topic_tag_*`: One-hot encoded categorical vector.
 
-### Validated Business & Statistical Proof
-* **41.46% Storage Cost Reduction:** An A/B financial simulation across 30,000 memory records proved that predicted `BIN` actions eliminate 41.46% of storage and compute overhead without losing high-value data.
-* **Chi-Square Statistical Proof:** $p\text{-value} = 2.22 \times 10^{-267}$, mathematically proving classifications represent learned behavioral patterns rather than random variance.
+### Separate Applied Data Science Evidence
+The C.O.R.E. Memory Intelligence project independently contains a synthetic-data study and financial simulation reporting a 41.46% scenario-based storage-cost reduction and a chi-square result of $p\text{-value} = 2.22 \times 10^{-267}$. Those results belong to that separate Applied Data Science project. They are not measured evidence that this public C.O.R.E. ecosystem architecture is complete or deployed.
 
 ---
 
 ## 4. Zero-Knowledge Metadata-Only Synchronization
 
-To ensure absolute privacy, raw conversational transcripts, documents, and encryption keys **never leave the local client device**.
+The target privacy design keeps raw conversational transcripts and encryption keys within local device boundaries. Any implementation would need to verify external API handling, logs, backups, telemetry, synchronization metadata, and failure paths before making an absolute privacy claim.
 
 ```
 [SATELLITE NODE: MOBILE / PC]                 [CENTRAL DGX NODE]
@@ -106,7 +105,7 @@ To ensure absolute privacy, raw conversational transcripts, documents, and encry
 
 ### Ephemeral RAM Key Security
 * Local SQLite vaults are decrypted using ephemeral keys stored exclusively in volatile memory (RAM).
-* If a satellite node loses its Tailscale mesh heartbeat (network disconnection, theft, or power-off), RAM keys are immediately wiped, leaving the local disk cryptographically locked.
+* The design proposes that a verified Tailscale mesh-heartbeat failure trigger RAM key zeroization, leaving the local disk cryptographically locked if the control is implemented and validated correctly.
 
 ---
 
@@ -252,7 +251,7 @@ CREATE INDEX idx_logs_memory_id ON retrieval_logs (memory_id);
 | :--- | :--- | :--- |
 | **Storage Strategy** | Flat vector dump (Memory Pollution) | **Two-Tier Domain Isolation** (Local Behavioral $\neq$ Shared A.X.I.O.M.) |
 | **Lifecycle Model** | Infinite bloat or dumb FIFO deletion | **Mathematical Logarithmic Decay ($S(t)$) + Random Forest ML** |
-| **Storage Optimization**| 0% (Accumulates indefinitely) | **41.46% Net Cost Reduction** ($p = 2.22 \times 10^{-267}$) |
+| **Storage Optimization**| 0% (Accumulates indefinitely) | **41.46% scenario reported by separate Memory Intelligence study** |
 | **Privacy Architecture** | Plaintext cloud sync | **Zero-Knowledge Metadata-Only Sync + RAM Ephemeral Keys** |
 | **Offline Multi-Device**| Fails / Overwrites data | **Store-and-Forward Queues + Domain Authority Routing** |
 | **Fact Contradiction** | Hallucinates conflicting dates/budgets | **Temporal Recency Multiplier ($e^{-\gamma \Delta t}$) + Entity Supercedence** |
@@ -261,4 +260,4 @@ CREATE INDEX idx_logs_memory_id ON retrieval_logs (memory_id);
 
 ---
 
-*Architectural Specification Complete | C.O.R.E. Sovereign Intelligence Layer*
+*Public Architectural Representation | C.O.R.E. Sovereign Intelligence Layer*

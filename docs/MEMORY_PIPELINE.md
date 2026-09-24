@@ -1,4 +1,4 @@
-# Memory Architecture & Pipeline — C.O.R.E.
+# Memory Architecture & Pipeline — C.O.R.E. Public Design Representation
 
 ## The Problem with Traditional AI Memory
 
@@ -11,7 +11,7 @@ Every commercial AI assistant suffers from the same fundamental flaws:
 
 ## C.O.R.E. Two-Tier Memory Architecture
 
-To solve these problems, C.O.R.E. enforces a **strict architectural separation** between **Behavioral Memory** and **Factual Knowledge**:
+To solve these problems, C.O.R.E. proposes a **strict architectural separation** between **Behavioral Memory** and **Factual Knowledge**. This is a design representation; the full ecosystem pipeline is not being claimed as prototype-ready.
 
 ```
                               C.O.R.E. MEMORY ECOSYSTEM
@@ -22,14 +22,14 @@ To solve these problems, C.O.R.E. enforces a **strict architectural separation**
    • Scope: LOCAL TO NODE (Not shared)              • Scope: SHARED ACROSS ALL NODES
    • Purpose: Shapes Tone & Behavior                • Purpose: Personal Library & Research
    • Data: Chat logs, voice preferences, habits     • Data: PDFs, Books, Audio, Video, Docs
-   • Engine: Random Forest Decay + Metadata Sync   • Engine: Matryoshka RAG + ColPali + Qdrant
+   • Engine: Proposed lifecycle classifier + metadata sync   • Engine: Proposed Matryoshka RAG + ColPali + Qdrant
 ```
 
 ---
 
 ## 1. Conversational Memory Pipeline (Local & Self-Decaying)
 
-Conversational memories are **device-bound and private**. Raw chat text is never sent to a cloud server. Only anonymized behavioral metadata is synchronized to the Central Node for lifecycle evaluation.
+The target design keeps conversational memories **device-bound and private**. Raw chat text should remain local while only the minimum metadata required for lifecycle evaluation is synchronized to a future trusted node. This boundary requires implementation, logging, backup, and external-API validation.
 
 ```
 User Message / Voice Interaction
@@ -43,8 +43,8 @@ User Message / Voice Interaction
   Topic tags govern decay rates (e.g. Health vs Nostalgia)
           │
           ▼
-  Central ML Classifier (RandomForest on DGX)
-  Evaluates anonymized metadata → Outputs KEEP / DECAY / BIN
+  Proposed Lifecycle Classifier (future central node)
+  Evaluates approved metadata → Outputs KEEP / DECAY / BIN
           │
           ▼
   Long-Term Staged Persistence
@@ -76,12 +76,11 @@ To preserve total user privacy:
      "days_since_last_retrieval": 14
    }
    ```
-3. Central DGX runs the trained `RandomForestClassifier` on the numbers and returns `{"memory_id": "f83a-910c", "decision": "KEEP"}`.
-4. **Result:** Central compute optimizes storage without ever seeing private personal conversations.
+3. A future trusted node could run the lifecycle classifier on the approved metadata and return `{"memory_id": "f83a-910c", "decision": "KEEP"}`.
+4. **Design goal:** Central compute optimizes lifecycle decisions without receiving private conversational content. This requires validation rather than assumption.
 
-### Business & Mathematical Validation
-* **Storage & Compute Cost Reduction:** Validated via A/B financial simulation across 30,000 synthetic memory records to generate a **41.46% net cost reduction** compared to standard indefinite retention.
-* **Statistical Independence:** Chi-Square hypothesis testing confirmed classification validity with $p = 2.22 \times 10^{-267}$.
+### Separate Applied Data Science Validation
+The separate C.O.R.E. Memory Intelligence project contains the synthetic-data A/B financial simulation across 30,000 memory records and reports a 41.46% scenario-based net cost reduction plus a chi-square result of $p = 2.22 \times 10^{-267}$. Those results should be discussed as evidence from that separate project, not as a measured deployment result for this public C.O.R.E. architecture.
 
 ---
 
@@ -89,7 +88,7 @@ To preserve total user privacy:
 
 While conversation memory stays local, **objective knowledge** (research papers, technical manuals, market reports, video keyframes) is managed by the **A.X.I.O.M.** RAG subsystem and shared across all satellite nodes:
 
-* **Matryoshka Adaptive Embeddings:** Dynamic vector slicing (1536d → 256d) for fast, low-latency pre-filtering in Qdrant.
-* **ColPali Visual Retrieval:** Direct ViT patch embedding on raw PDF pages, eliminating OCR layout destruction.
-* **Role-Scoped Redis Caching:** Sub-15ms cache hit latency cryptographically bound to permission hashes.
-* **RAG Triad Observability:** Real-time monitoring of Context Relevance, Groundedness (SLA 1.00), and Answer Relevance with verbatim citation mapping.
+* **Matryoshka Adaptive Embeddings:** Proposed dynamic vector slicing (1536d → 256d) for fast pre-filtering in Qdrant; quality and latency require benchmarking.
+* **ColPali Visual Retrieval:** Proposed direct ViT patch embedding on raw PDF pages to preserve layout that OCR can lose.
+* **Role-Scoped Redis Caching:** Proposed permission-scoped caching with sub-15ms as a design target, not a measured result.
+* **RAG Triad Observability:** Proposed monitoring of Context Relevance, Groundedness, and Answer Relevance with citation mapping; a 1.00 threshold is a policy target requiring evaluation.
