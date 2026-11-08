@@ -7,6 +7,19 @@
 
 ---
 
+## Executive Problem & Engineering Solution
+
+* **The Problem It Kills:** Cloud AI Surveillance, Vendor Lock-in & Explosive Token Inefficiency.
+  * **The Reality:** Sending 100% of user queries to cloud frontier LLMs (OpenAI, Anthropic) costs thousands of dollars a month, leaks proprietary data to third-party servers, and creates total failure if the device loses internet access.
+  * **How Naive Engineers Fail:** They either route everything through expensive cloud APIs or try to run slow, massive 70B models locally that freeze hardware and drain batteries.
+  * **The Architectural Solution:** A 3-Tier Execution Waterfall:
+    * **Tier 0:** Deterministic Regex Reflex ($< 15\text{ms}$, 0 tokens, $0 cost).
+    * **Tier 1:** Local Quantized Edge Model (Qwen 1.5B on device, 0 API cost, 100% offline).
+    * **Tier 2:** Bounded Cloud Foundation LLM (only invoked when reasoning depth exceeds edge capacity).
+  * **The Impact:** **100% data sovereignty**, zero token waste on reflex tasks, and guaranteed offline survival.
+
+---
+
 ## What is C.O.R.E.?
 
 C.O.R.E. is a **sovereign cross-device operating ecosystem** that originated as a digital companion and has evolved into an orchestration layer for multi-agent workflows, personal memory, and hardware tasks.
