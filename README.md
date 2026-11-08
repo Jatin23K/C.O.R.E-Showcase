@@ -1,5 +1,5 @@
 # C.O.R.E.
-### Cognitive Operation and Reasoning Engine
+### Cognitive Operation and Routing Engine
 
 > *C.O.R.E. is maintained as a private sovereign system because it runs on personal hardware and concerns real-world credentials, private notes, and personal data. This repository is a public architectural representation of C.O.R.E.; it is not the private implementation and does not expose operational code, credentials, personal memory databases, or private network configuration.*
 
@@ -23,7 +23,7 @@ Two client concepts. One encrypted device-to-device mesh design. No third-party 
 
 ## 🏛️ The Umbrella Ecosystem
 
-C.O.R.E. serves as the central orchestrator that connects and powers my specialized intelligence subsystems:
+C.O.R.E. serves as the central runtime and sovereign orchestration layer connecting modular services, automations, and specialized ML engines:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -41,18 +41,18 @@ C.O.R.E. serves as the central orchestrator that connects and powers my speciali
 │  CENTRAL ORCHESTRATOR│ [ APPLIED CAPABILITIES ]                                     │  │
 │                      │ ┌──────────────────────────┐  ┌───────────────────────────┐  │  │
 │                      │ │       TLDR Shield        │  │       LaunchMintAI        │  │  │
-│                      │ │ PRIVACY & INGESTION RISK │  │ FORENSIC MARKET CORTEX    │  │  │
+│                      │ │ GROUNDED LEGAL NLP & RISK │  │ XGBOOST SURVIVAL & ML     │  │  │
 │                      │ └──────────────────────────┘  └───────────────────────────┘  │  │
 │                      │ ┌─────────────────────────────────────────────────────────┐  │  │
 │                      │ │                    Future Expansion                     │  │  │
-│                      │ │                 INFINITE NODE CAPACITY                  │  │  │
+│                      │ │                 PLUGGABLE REGISTRATION                  │  │  │
 │                      │ └─────────────────────────────────────────────────────────┘  │  │
 │                      └──────────────────────────────────────────────────────────────┘  │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **[TLDR Shield](https://github.com/Jatin23K/TLDR-Shield)** — The *Privacy Ingestion Shield*. Scans policy documents and privacy risks across 6 pillars with verbatim DOM highlighting.
-2. **[LaunchMintAI](https://github.com/Jatin23K/LaunchMintAI)** — The *Market Research Cortex*. Evaluates startup ideas and competitors using XGBoost models ($AUC = 0.8170$) and Monte Carlo simulations.
+1. **[TLDR Shield](https://github.com/Jatin23K/TLDR-Shield)** — The *Grounded Legal NLP & Risk Classifier*. Scans policy documents and privacy risks across 6 pillars with 94.0% deep precision and deterministic DOM verification.
+2. **[LaunchMintAI](https://github.com/Jatin23K/LaunchMintAI)** — The *Startup Survival & Quantitative ML Engine*. Evaluates startup survival using a leak-free XGBoost model ($ROC\text{-}AUC = 0.8512$ on 189k records) and vectorized Monte Carlo simulations.
 3. **C.O.R.E. Memory Intelligence** — A separate Applied Data Science project that explores lifecycle classification and storage-cost optimization for a future C.O.R.E. memory subsystem. Its empirical metrics do not represent the completeness of the C.O.R.E. ecosystem.
 4. **[A.X.I.O.M.](https://github.com/Jatin23K/A.X.I.O.M)** — The *Enterprise Omnimodal RAG Architecture Specification*. Its multimodal retrieval and cache figures are designed targets, not measured C.O.R.E. production results.
 
